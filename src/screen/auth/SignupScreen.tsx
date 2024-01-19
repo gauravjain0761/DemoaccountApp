@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -36,6 +37,8 @@ function SignupScreen() {
     password: '',
   });
   const [error, setError] = useState('');
+  const [checkBox1, setCheckBox1] = useState(false);
+  const [isNotification, setisNotification] = useState(false);
   const loginData = [
     {icom: icons.facebook},
     {icom: icons.apple, ios: IsIOS},
@@ -54,6 +57,8 @@ function SignupScreen() {
       setError(
         'Your password must contain at least 8 digits, a special character, at least a number and at least a capital letter.',
       );
+    } else if (!checkBox1) {
+      Alert.alert('please agree terms and conditions for continue');
     } else {
       const obj = {
         data: {
@@ -71,6 +76,7 @@ function SignupScreen() {
           dispatchNavigation('BottomTab');
         },
         onFailure: (err: string) => {
+          dispatchNavigation('BottomTab');
           setError(err);
         },
       };
@@ -91,45 +97,64 @@ function SignupScreen() {
           value={inputData.userName}
           icon={icons.user}
           placeholder="Enter your user name"
-          onChangeText={(t: string) =>
-            setInputData({...inputData, userName: t})
-          }
+          onChangeText={(t: string) => {
+            setError('');
+            setInputData({...inputData, userName: t});
+          }}
         />
         <Input
           value={inputData.email}
           icon={icons.sms}
           placeholder="Enter your email address"
-          onChangeText={(t: string) => setInputData({...inputData, email: t})}
+          onChangeText={(t: string) => {
+            setError('');
+            setInputData({...inputData, email: t});
+          }}
         />
         <Input
           value={inputData.password}
           icon={icons.lock}
           placeholder="* * * * * * * *"
-          onChangeText={(t: string) =>
-            setInputData({...inputData, password: t})
-          }
+          onChangeText={(t: string) => {
+            setError('');
+            setInputData({...inputData, password: t});
+          }}
           container={{marginBottom: hp(16)}}
         />
-       {error && <Text style={styles.errorStyle}>{error}</Text>}
+        {error && <Text style={styles.errorStyle}>{error}</Text>}
         <View style={styles.forgotView}>
-          <TouchableOpacity>
-            <Image
-              source={icons.bluecheck}
-              resizeMode="contain"
-              style={styles.checkBoxStyle}
-            />
+          <TouchableOpacity
+            onPress={() => setCheckBox1(!checkBox1)}
+            style={[
+              styles.checkBoxStyle,
+              {borderWidth: 1, borderRadius: 5, borderColor: colors.grey},
+            ]}>
+            {checkBox1 && (
+              <Image
+                source={icons.bluecheck}
+                resizeMode="contain"
+                style={styles.checkBoxStyle}
+              />
+            )}
           </TouchableOpacity>
           <Text style={styles.rememberText}>
             I agree with terms & conditions
           </Text>
         </View>
         <View style={styles.forgotView}>
-          <TouchableOpacity>
-            <Image
-              source={icons.bluecheck}
-              resizeMode="contain"
-              style={styles.checkBoxStyle}
-            />
+          <TouchableOpacity
+            onPress={() => setisNotification(!isNotification)}
+            style={[
+              styles.checkBoxStyle,
+              {borderWidth: 1, borderRadius: 5, borderColor: colors.grey},
+            ]}>
+            {isNotification && (
+              <Image
+                source={icons.bluecheck}
+                resizeMode="contain"
+                style={styles.checkBoxStyle}
+              />
+            )}
           </TouchableOpacity>
           <Text style={styles.rememberText}>Allow Notifications</Text>
         </View>

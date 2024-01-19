@@ -30,6 +30,7 @@ import {emailCheck} from '../../utils/validation';
 function SigninScreen() {
   const dispatch = useDispatch<any>();
   const {navigate} = useNavigation<any>();
+  const [checkBox1, setCheckBox1] = useState(false);
   const [inputData, setInputData] = useState({
     email: '',
     password: '',
@@ -117,12 +118,19 @@ function SigninScreen() {
             {justifyContent: 'space-between', marginTop: hp(17)},
           ]}>
           <View style={styles.forgotView}>
-            <TouchableOpacity>
-              <Image
-                source={icons.bluecheck}
-                resizeMode="contain"
-                style={styles.checkBoxStyle}
-              />
+            <TouchableOpacity
+              onPress={()=>setCheckBox1(!checkBox1)}
+              style={[
+                styles.checkBoxStyle,
+                {borderWidth: 1, borderRadius: 5, borderColor: colors.grey},
+              ]}>
+              {checkBox1 && (
+                <Image
+                  source={icons.bluecheck}
+                  resizeMode="contain"
+                  style={styles.checkBoxStyle}
+                />
+              )}
             </TouchableOpacity>
             <Text style={styles.rememberText}>Remember me</Text>
           </View>
